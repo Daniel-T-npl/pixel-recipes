@@ -152,7 +152,7 @@ export default function ProjectPage({ project }) {
           <div className="bg-[#1a1a1a] rounded-3xl p-8 md:p-12 border border-white/5 shadow-xl">
               <h2 className="text-2xl font-bold mb-8 flex items-center text-white">
                   <span className="text-indigo-400 mr-3">#</span>
-                  The Recipe Process
+                  The Recipe 
               </h2>
               <article className="prose prose-invert prose-indigo max-w-none prose-lg prose-headings:font-bold prose-a:text-indigo-400">
                   <ReactMarkdown>
