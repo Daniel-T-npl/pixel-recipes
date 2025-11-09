@@ -79,6 +79,19 @@ export default function Navbar({ darkData, isDynamicHome }) {
     );
   }
 
+  // Small shared AI icon used in both top nav and sidebar so visuals match
+  const AiIcon = ({ className = 'w-5 h-5 text-white' }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="M4 12H2" />
+      <path d="M22 12h-2" />
+      <path d="M20.5 4.5l-1.5 1.5" />
+      <path d="M5 19l1.5-1.5" />
+    </svg>
+  );
+
   return (
     <>
         {/* 1. STANDARD TOP NAVBAR */}
@@ -105,7 +118,11 @@ export default function Navbar({ darkData, isDynamicHome }) {
 
             <div className="flex items-center gap-4">
                {/* Desktop links */}
-               <div className="hidden md:flex md:order-2 space-x-3 rtl:space-x-reverse min-h-[40px] min-w-[100px] justify-end">
+               <div className="hidden md:flex md:order-2 items-center space-x-3 rtl:space-x-reverse min-h-[40px] min-w-[100px] justify-end">
+                  <Link href="/ai-theme" className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/6 transition-colors text-sm font-medium">
+                    <AiIcon className="w-5 h-5 text-white" />
+                    <span className="text-sm font-semibold text-white">AI Theme</span>
+                  </Link>
                   <NavLinks isVertical={false} />
                </div>
 
@@ -126,6 +143,10 @@ export default function Navbar({ darkData, isDynamicHome }) {
             {/* Mobile dropdown */}
             {showMobileMenu && (
               <div className="absolute right-6 top-full mt-3 w-56 p-4 rounded-2xl bg-[#0b0b0b]/95 backdrop-blur-md border border-white/5 shadow-xl md:hidden">
+                <Link href="/ai-theme" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/6 transition-colors text-sm font-medium mb-2">
+                  <AiIcon className="w-5 h-5 text-white" />
+                  <span className="text-white">AI Theme</span>
+                </Link>
                 <NavLinks isVertical={true} />
               </div>
             )}
@@ -150,6 +171,12 @@ export default function Navbar({ darkData, isDynamicHome }) {
               <path d="M16 16 l3 -3 -3 -3" />
             </svg>
            </div>
+                </Link>
+                <Link href="/ai-theme" className="group">
+                  <div className="flex items-center gap-2 p-3 rounded-2xl bg-amber-500 group-hover:scale-110 transition-all duration-300 shadow-lg shadow-amber-400/30">
+                    <AiIcon className="w-6 h-6 text-white" />
+                    <span className="text-xs font-semibold text-white uppercase">AI</span>
+                  </div>
                 </Link>
                 <NavLinks isVertical={true} />
             </nav>
