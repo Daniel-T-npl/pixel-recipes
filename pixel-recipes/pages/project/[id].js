@@ -1,66 +1,101 @@
 import Navbar from '../../components/Navbar';
 import { db } from '../../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import ReactMarkdown from 'react-markdown';
-// Import the slider component.
-// NOTE: We might need to dynamically import this if it causes issues with server-side rendering,
-// but let's try the simple way first.
 import ReactBeforeSliderComponent from 'react-before-after-slider-component';
 import 'react-before-after-slider-component/dist/build.css';
+import { useUserData } from '../../lib/hooks';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function ProjectPage({ project }) {
-  if (!project) {
-      return <main className="pt-20 text-center">Project not found.</main>;
-  }
+  // --- MOVED THESE HOOKS TO THE TOP ---
+  const { user } = useUserData();
+  const router = useRouter();
 
-  // Slider setup
+  if (!project) return <main className="pt-20 text-center text-white bg-[#0f0f0f] min-h-screen">Project not found.</main>;
+
   const FIRST_IMAGE = { imageUrl: project.beforeImage };
   const SECOND_IMAGE = { imageUrl: project.afterImage };
 
-  return (
-    <main className="min-h-screen bg-white">
-      <Navbar />
+  const handleDelete = async () => {
+      const confirmed = window.confirm("Are you sure you want to delete this log? This cannot be undone.");
+      if (confirmed) {
+          try {
+              await deleteDoc(doc(db, "projects", project.id));
+              alert("Log deleted.");
+              router.push('/');
+          } catch (error) {
+              alert("Error deleting: " + error.message);
+          }
+      }
+  };
 
-      {/* 1. The Hero Section (Title & Artist) */}
-      <div className="pt-24 pb-10 px-4 max-w-screen-xl mx-auto text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+  return (
+    <main className="min-h-screen bg-[#0f0f0f] text-white">
+      <Navbar darkData={true} />
+
+      {/* 1. Hero Section */}
+      <div className="pt-32 pb-10 px-4 max-w-screen-xl mx-auto text-center relative">
+        {/* --- OWNER CONTROLS (Only visible to owner) --- */}
+        {user && user.uid === project.uid && (
+            <div className="absolute top-24 right-4">
+                <Link href={`/edit/${project.id}`}>
+                    <button className="bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-xs font-bold hover:bg-indigo-500 hover:text-white transition-colors">
+                        EDIT
+                    </button>
+                </Link>
+                <button
+                    onClick={handleDelete}
+                    className="bg-red-500/10 text-red-500 px-3 py-1 rounded-full text-xs font-bold hover:bg-red-500 hover:text-white transition-colors"
+                >
+                    DELETE LOG
+                </button>
+            </div>
+            
+        )}
+
+        <p className="text-indigo-400 font-mono text-sm mb-4 tracking-widest uppercase">
+            {project.software}
+        </p>
+        <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
             {project.title}
         </h1>
-        <p className="text-xl text-gray-500">
-            Created by <span className="font-semibold text-indigo-600">{project.username}</span>
-            {' • '}
-            <span className="text-gray-400">{project.software}</span>
-        </p>
+        <div className="flex items-center justify-center gap-3">
+            {/* Handle username safely in case it's missing */}
+            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-sm">
+                {(project.username && project.username[0]) ? project.username[0].toUpperCase() : '?'}
+            </div>
+            <p className="text-lg text-gray-300">
+                by <span className="font-semibold text-white">{project.username || 'Anonymous'}</span>
+            </p>
+        </div>
       </div>
 
-      {/* 2. THE WOW FACTOR: Comparison Slider */}
-      <div className="w-full max-w-4xl mx-auto mb-16 px-4">
-          {/* We wrap it in a div to control max width */}
-          <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+      {/* 2. WOW Slider */}
+      <div className="w-full max-w-5xl mx-auto mb-20 px-4">
+          <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10">
              <ReactBeforeSliderComponent
-                firstImage={FIRST_IMAGE}
-                secondImage={SECOND_IMAGE}
-                currentPercentPosition={50} // Start in the middle
-                delimiterColor="#4F46E5"   // Indigo dividing line
+                firstImage={SECOND_IMAGE}
+                secondImage={FIRST_IMAGE}
+                currentPercentPosition={50}
+                delimiterColor="#4F46E5"
              />
           </div>
-          <div className="flex justify-between text-sm font-bold text-gray-400 mt-2 px-4">
-              <p>BEFORE (Raw)</p>
-              <p>AFTER (Final)</p>
+           <div className="flex justify-between text-xs font-bold tracking-widest text-gray-500 mt-4 px-2">
+              <p>RAW // BEFORE</p>
+              <p>FINAL // AFTER</p>
           </div>
       </div>
 
-      {/* 3. The Recipe Section */}
-      <div className="max-w-screen-md mx-auto px-4 pb-24">
-          <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <span className="bg-indigo-100 text-indigo-600 p-2 rounded-lg mr-4">
-                    📝
-                  </span>
-                  The Recipe
+      {/* 3. Recipe Section - Dark Mode */}
+      <div className="max-w-screen-md mx-auto px-4 pb-32">
+          <div className="bg-[#1a1a1a] rounded-3xl p-8 md:p-12 border border-white/5 shadow-xl">
+              <h2 className="text-2xl font-bold mb-8 flex items-center text-white">
+                  <span className="text-indigo-400 mr-3">#</span>
+                  The Recipe Process
               </h2>
-              {/* React Markdown renders the text nicely */}
-              <article className="prose prose-indigo max-w-none">
+              <article className="prose prose-invert prose-indigo max-w-none prose-lg prose-headings:font-bold prose-a:text-indigo-400">
                   <ReactMarkdown>
                       {project.recipe}
                   </ReactMarkdown>
@@ -72,16 +107,13 @@ export default function ProjectPage({ project }) {
   );
 }
 
-// Fetch data on the server before rendering
 export async function getServerSideProps(context) {
-    const { id } = context.params; // Get the ID from the URL
+    const { id } = context.params;
     try {
         const docRef = doc(db, "projects", id);
         const docSnap = await getDoc(docRef);
-
         if (docSnap.exists()) {
             const data = docSnap.data();
-            // Must convert timestamp to number for Next.js
             const project = {
                 id: docSnap.id,
                 ...data,
@@ -92,7 +124,5 @@ export async function getServerSideProps(context) {
     } catch (error) {
         console.error("Error fetching project:", error);
     }
-
-    // If not found or error, return null project
     return { props: { project: null } };
 }

@@ -5,69 +5,65 @@ import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
 export default function Home({ projects = [] }) {
   return (
-    <main className="min-h-screen bg-gray-50 pt-20">
-      <Navbar />
-      <div className="max-w-screen-xl mx-auto p-4">
+    <main className="min-h-screen bg-[#0f0f0f]">
+      <Navbar darkData={true} />
 
-        {/* Hero Section */}
-        <div className="text-center py-12 md:py-20">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-              Discover Creative <span className="text-indigo-600">Recipes</span>
-            </h1>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-8">
-              Don't just see the result. See the process. Explore before-and-after transformations and learn exactly how they were made.
-            </p>
-            {/* Call to Action */}
-            <div className="flex justify-center gap-4">
-                 <a href="/create" className="text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-lg px-6 py-3">
-                    Share Your Work
-                 </a>
+      {/* 1. Sticky Hero Section */}
+      {/* 'sticky top-0' keeps it at the top of the viewport while we scroll past it */}
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-4 text-center z-0">
+        <h1 className="text-5xl md:text-9xl font-black text-white tracking-tighter mb-6 leading-none">
+          SEE WHAT<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">
+            EDITING
+          </span><br />
+          CAN DO.
+        </h1>
+        <p className="text-gray-400 text-xl md:text-2xl max-w-xl animate-pulse">
+            Scroll to discover ↓
+        </p>
+      </div>
+
+      {/* 2. The Gallery (Covers the Hero) */}
+      {/* 'relative z-10' ensures it slides ON TOP of the sticky hero */}
+      {/* 'bg-[#0f0f0f]' ensures it's opaque and actually covers the text */}
+      {/* 'min-h-screen' ensures it's tall enough to fully cover */}
+      <div className="relative z-10 bg-[#0f0f0f] min-h-screen pt-20 px-4 pb-20 rounded-t-3xl shadow-[0_-20px_60px_-15px_rgba(0,0,0,1)]">
+
+        <div className="max-w-screen-xl mx-auto">
+            <h2 className="text-gray-500 text-sm font-bold tracking-widest uppercase mb-8 text-center">
+                Latest Community Recipes
+            </h2>
+
+            {/* MASONRY GRID LAYOUT */}
+            {/* columns-1, columns-2, etc. creates the Pinterest style layout */}
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+                {projects.map((project) => (
+                    <ProjectCard key={project.id} project={project} />
+                ))}
             </div>
         </div>
-
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-            ))}
-        </div>
-
-        {/* Empty State (if no projects exist yet) */}
-        {projects.length === 0 && (
-            <div className="text-center text-gray-500 py-20">
-                No projects yet. Be the first to post!
-            </div>
-        )}
 
       </div>
     </main>
   );
 }
 
-// This function runs on the SERVER every time the page is requested.
+// ... getServerSideProps remains the same ...
 export async function getServerSideProps() {
     const projects = [];
     try {
-        // Query the 'projects' collection, order by newest first, limit to 20
         const q = query(collection(db, "projects"), orderBy("createdAt", "desc"), limit(20));
         const querySnapshot = await getDocs(q);
-
         querySnapshot.forEach((doc) => {
-            // We must convert Firestore timestamps to regular strings/numbers
-            // because Next.js can't serialize complex objects to JSON.
             const data = doc.data();
             projects.push({
                 id: doc.id,
                 ...data,
-                createdAt: data.createdAt?.toMillis() || 0, // Safe timestamp conversion
+                createdAt: data.createdAt?.toMillis() || 0,
             });
         });
     } catch (error) {
         console.error("Error fetching projects:", error);
-        // In a real app we might handle this better, but for now just return empty array
     }
-
-    return {
-        props: { projects }, // Will be passed to the Home component as props
-    };
+    return { props: { projects } };
 }

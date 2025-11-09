@@ -39,6 +39,9 @@ export default function Navbar() {
                   + New Log
                 </button>
               </Link>
+              <Link href="/dashboard">
+                <img className="w-10 h-10 rounded-full border-2 border-indigo-200 cursor-pointer" src={user.photoURL || "https://api.dicebear.com/9.x/lorelei/svg"} alt="User dropdown" />
+              </Link>
               <button
                   onClick={handleSignOut}
                   className="text-gray-500 hover:text-red-600 font-medium text-sm px-3 py-2"
