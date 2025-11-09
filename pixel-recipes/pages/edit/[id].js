@@ -87,49 +87,49 @@ export default function EditPage() {
   if (loading || isLoadingData) return <main className="p-10 text-center">Loading...</main>;
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-20 pb-20">
-      <Navbar />
+    <main className="min-h-screen bg-[#0f0f0f] text-white pt-20 pb-20">
+      <Navbar darkData={true} />
       <div className="max-w-screen-md mx-auto p-4">
         <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Edit Log</h1>
+            <h1 className="text-3xl font-extrabold text-white">Edit Log</h1>
             <Link href={`/project/${id}`}>
-                <span className="text-gray-500 hover:underline cursor-pointer">Cancel</span>
+                <span className="text-gray-300 hover:underline cursor-pointer">Cancel</span>
             </Link>
         </div>
 
-        <form onSubmit={handleUpdate} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
+        <form onSubmit={handleUpdate} className="bg-[#0b0b0b]/80 p-6 rounded-2xl shadow-xl border border-white/5 space-y-6 backdrop-blur-sm">
 
             {/* Notice to user */}
-            <div className="bg-yellow-50 p-4 rounded-lg text-sm text-yellow-800 border border-yellow-200">
-                NOTE: To change images, please delete this log and create a new one.
-            </div>
+      <div className="bg-yellow-50/90 p-4 rounded-lg text-sm text-yellow-900 border border-yellow-200">
+        NOTE: To change images, please delete this log and create a new one.
+      </div>
 
             {/* Title & Software */}
             <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Project Title</label>
-                    <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required value={title} onChange={(e) => setTitle(e.target.value)} />
+          <label className="block mb-2 text-sm font-medium text-gray-200">Project Title</label>
+          <input type="text" className="bg-[#0f0f0f] border border-white/10 text-white text-sm rounded-lg block w-full p-2.5" required value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
                 <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Software Used</label>
-                    <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required value={software} onChange={(e) => setSoftware(e.target.value)} />
+          <label className="block mb-2 text-sm font-medium text-gray-200">Software Used</label>
+          <input type="text" className="bg-[#0f0f0f] border border-white/10 text-white text-sm rounded-lg block w-full p-2.5" required value={software} onChange={(e) => setSoftware(e.target.value)} />
                 </div>
             </div>
 
             {/* Recipe */}
             <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900">The Recipe</label>
-                <textarea rows="10" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 font-mono" required value={recipe} onChange={(e) => setRecipe(e.target.value)}></textarea>
+        <label className="block mb-2 text-sm font-medium text-gray-200">The Recipe</label>
+        <textarea rows="10" className="block p-2.5 w-full text-sm text-white bg-[#0f0f0f] rounded-lg border border-white/10 font-mono" required value={recipe} onChange={(e) => setRecipe(e.target.value)}></textarea>
             </div>
 
             {/* Submit Button */}
-            <button
-                type="submit"
-                disabled={isUpdating}
-                className={`text-white font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${isUpdating ? 'bg-gray-400' : 'bg-indigo-700 hover:bg-indigo-800'}`}
-            >
-                {isUpdating ? 'Updating...' : 'Save Changes'}
-            </button>
+      <button
+        type="submit"
+        disabled={isUpdating}
+        className={`text-white font-semibold rounded-full text-sm w-full sm:w-auto px-6 py-3 text-center ${isUpdating ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-700 shadow-md'}`}
+      >
+        {isUpdating ? 'Updating...' : 'Save Changes'}
+      </button>
 
         </form>
       </div>

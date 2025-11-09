@@ -16,7 +16,7 @@ export default function ImageUploader({ label, onFileSelect, previewUrl }) {
 
   return (
     <div className="mb-6">
-      <label className="block mb-2 text-sm font-medium text-gray-900">{label}</label>
+      <label className="block mb-2 text-sm font-medium text-gray-200">{label}</label>
 
       {/* The Preview Area */}
       <div className="flex items-center justify-center w-full">

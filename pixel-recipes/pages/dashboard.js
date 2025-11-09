@@ -5,6 +5,7 @@ import { db } from '../lib/firebase';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useUserData();
@@ -14,7 +15,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     // 1. Redirect if not logged in
-    if (!user && !authLoading) {
+    if (!authLoading && !user) {
         router.push('/enter');
         return;
     }
@@ -22,8 +23,6 @@ export default function DashboardPage() {
     // 2. Fetch user's projects in real-time
     let unsubscribe;
     if (user) {
-        // NOTE: This query might require a Firestore index.
-        // If it fails, check the browser console for a link to create it automatically!
         const q = query(
             collection(db, "projects"),
             where("uid", "==", user.uid),
@@ -36,14 +35,20 @@ export default function DashboardPage() {
                 ...doc.data()
             }));
             setProjects(userProjects);
-            setLoadingProjects(false);
+            setLoadingProjects(false); // This MUST run, even if snapshot is empty
+        }, (error) => {
+            console.error("Error fetching dashboard projects:", error);
+            setLoadingProjects(false); // Ensure we don't get stuck on loading if error
         });
     }
 
     return () => unsubscribe && unsubscribe();
   }, [user, authLoading, router]);
 
-  if (authLoading || loadingProjects) return <main className="min-h-screen bg-[#0f0f0f] pt-24 text-center text-white">Loading your work...</main>;
+  // Show loading ONLY if we are truly waiting for something
+  if (authLoading || (loadingProjects && user)) {
+      return <main className="min-h-screen bg-[#0f0f0f] pt-24 text-center text-white">Loading your work...</main>;
+  }
 
   return (
     <main className="min-h-screen bg-[#0f0f0f]">
@@ -59,7 +64,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Empty State */}
-        {projects.length === 0 && (
+        {!loadingProjects && projects.length === 0 && (
             <div className="text-center py-20 text-gray-400">
                 You haven't published any logs yet.
                 <br />

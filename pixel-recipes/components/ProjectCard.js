@@ -3,8 +3,8 @@ import Link from 'next/link';
 export default function ProjectCard({ project }) {
   return (
     <Link href={`/project/${project.id}`}>
-      {/* 'mb-6' adds space below each card in the masonry column */}
-      <div className="relative mb-6 break-inside-avoid rounded-xl overflow-hidden cursor-pointer group">
+      {/* ADDED: 'relative z-10 bg-[#0f0f0f]' to ensure it sits ON TOP of the glow */}
+      <div className="relative z-10 bg-[#0f0f0f] mb-6 break-inside-avoid rounded-xl overflow-hidden cursor-pointer group shadow-2xl">
         {/* Background Image - let it determine height */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

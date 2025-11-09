@@ -35,7 +35,7 @@ export default function EnterPage() {
   return (
     <main className="flex h-screen items-center justify-center bg-gray-50">
       <div className="p-10 bg-white rounded-xl shadow-lg text-center max-w-sm">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Join EditLog</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Join image.raw</h1>
         <p className="text-gray-600 mb-6">
           Sign in with Google to start sharing your creative process.
         </p>

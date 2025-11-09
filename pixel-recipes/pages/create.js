@@ -76,45 +76,45 @@ export default function CreatePage() {
     }
   };
 
-  if (loading) return <main className="p-10">Loading...</main>;
+    if (loading) return <main className="p-10">Loading...</main>;
 
-  return (
-    <main className="min-h-screen bg-gray-50 pt-20 pb-20">
-      <Navbar />
-      <div className="max-w-screen-md mx-auto p-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Create New Log</h1>
+    return (
+        <main className="min-h-screen bg-[#0f0f0f] text-white pt-20 pb-20">
+            <Navbar darkData={true} />
+            <div className="max-w-screen-md mx-auto p-4">
+                <h1 className="text-3xl font-extrabold tracking-tight text-white mb-6">Create New Log</h1>
 
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
+                <form onSubmit={handleSubmit} className="bg-[#0b0b0b]/80 p-6 rounded-2xl shadow-xl border border-white/5 space-y-6 backdrop-blur-sm">
 
             {/* Basic Info inputs... (same as before) */}
             <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Project Title</label>
-                    <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="e.g. Moody Urban Sunset" required value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <label className="block mb-2 text-sm font-medium text-gray-200">Project Title</label>
+                        <input type="text" className="bg-[#0f0f0f] border border-white/10 text-white text-sm rounded-lg block w-full p-2.5" placeholder="e.g. Moody Urban Sunset" required value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
                 <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900">Software Used</label>
-                    <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="e.g. Lightroom" required value={software} onChange={(e) => setSoftware(e.target.value)} />
+                        <label className="block mb-2 text-sm font-medium text-gray-200">Software Used</label>
+                        <input type="text" className="bg-[#0f0f0f] border border-white/10 text-white text-sm rounded-lg block w-full p-2.5" placeholder="e.g. Lightroom" required value={software} onChange={(e) => setSoftware(e.target.value)} />
                 </div>
             </div>
 
             {/* Image Uploaders... (same as before) */}
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 ">
                 <ImageUploader label="Before Image (Raw)" onFileSelect={setBeforeFile} />
                 <ImageUploader label="After Image (Final)" onFileSelect={setAfterFile} />
             </div>
 
             {/* Recipe Textarea... (same as before) */}
             <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900">The Recipe (Markdown supported)</label>
-                <textarea rows="8" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 font-mono" placeholder="1. Step one..." required value={recipe} onChange={(e) => setRecipe(e.target.value)}></textarea>
+                <label className="block mb-2 text-sm font-medium text-gray-200">The Recipe (Markdown supported)</label>
+                <textarea rows="8" className="block p-2.5 w-full text-sm text-white bg-[#0f0f0f] rounded-lg border border-white/10 font-mono" placeholder="1. Step one..." required value={recipe} onChange={(e) => setRecipe(e.target.value)}></textarea>
             </div>
 
             {/* Submit Button - NOW WITH LOADING STATE */}
             <button
                 type="submit"
                 disabled={isUploading}
-                className={`text-white font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-700 hover:bg-indigo-800'}`}
+                className={`text-white font-semibold rounded-full text-sm w-full sm:w-auto px-6 py-3 text-center ${isUploading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-md'}`}
             >
                 {isUploading ? 'Uploading...' : 'Publish Log'}
             </button>

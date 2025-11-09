@@ -1,8 +1,13 @@
 import '../styles/globals.css';
-// If you have other global styles, import them here too
+import MouseGlow from '../components/MouseGlow'; // Import it
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <>
+      <MouseGlow />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 export default MyApp;
